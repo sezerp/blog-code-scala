@@ -4,6 +4,10 @@ import scala.annotation.tailrec
 import scala.collection.mutable
 import scala.collection.mutable.{Stack, Set => MSet}
 
+
+/**
+ * Detecting cycles in directed graphs using graph coloring
+ * */
 object CyclesInDirectedGraph extends App {
 
   private def hasCycleRec(graph: Map[String, Set[String]]): Boolean = {
