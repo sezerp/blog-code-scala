@@ -10,7 +10,7 @@ import scala.collection.mutable.{Stack, Set => MSet}
  * */
 object CyclesInDirectedGraph extends App {
 
-  private def hasCycleRec(graph: Map[String, Set[String]]): Boolean = {
+  private def hasCycleRec(graph: Map[String, List[String]]): Boolean = {
     val visiting = MSet.empty[String]
     val visited  = MSet.empty[String]
 
@@ -40,7 +40,7 @@ object CyclesInDirectedGraph extends App {
     false
   }
 
-  private def hasCycleStackSafe(graph: Map[String, Set[String]]): Boolean = {
+  private def hasCycleStackSafe(graph: Map[String, List[String]]): Boolean = {
     val visiting = MSet.empty[String]
     val visited  = MSet.empty[String]
     val stack    = mutable.Stack.empty[String]
@@ -71,7 +71,7 @@ object CyclesInDirectedGraph extends App {
     false
   }
 
-  private def hasCycleTailRec(graph: Map[String, Set[String]]): Boolean = {
+  private def hasCycleTailRec(graph: Map[String, List[String]]): Boolean = {
     val visiting = MSet.empty[String]
     val visited  = MSet.empty[String]
 
@@ -84,7 +84,7 @@ object CyclesInDirectedGraph extends App {
           false
         case head :: tail if visited(head) => hasCycle(tail)
         case head :: tail =>
-          graph(head).filterNot(visited).toList match {
+          graph(head).filterNot(visited) match {
             case Nil =>
               visited.add(head)
               visiting.remove(head)
@@ -109,14 +109,14 @@ object CyclesInDirectedGraph extends App {
     loop(graph.keys.toList)
   }
 
-  private def hasCycleTailRecMoreFunctional(graph: Map[String, Set[String]]): Boolean = {
+  private def hasCycleTailRecMoreFunctional(graph: Map[String, List[String]]): Boolean = {
     @tailrec
     def hasCycle(stack: List[String], visiting: Set[String], visited: Set[String]): (Boolean, Set[String]) = {
       stack match {
         case Nil => (false, visited ++ visiting)
         case head :: tail if visited(head) => hasCycle(tail, visiting, visited)
         case head :: tail =>
-          graph(head).filterNot(visited).toList match {
+          graph(head).filterNot(visited) match {
             case Nil => hasCycle(tail, visiting - head, visited + head)
             case _ if visiting(head) => (true, visited)
             case descendants         => hasCycle(descendants ++ tail, visiting + head, visited)
@@ -143,55 +143,55 @@ object CyclesInDirectedGraph extends App {
 
 
   private val graphWithCycle = Map(
-    "a" -> Set("b", "c", "d"),
-    "b" -> Set.empty[String],
-    "c" -> Set("e"),
-    "d" -> Set.empty[String],
-    "e" -> Set("f", "b"),
-    "f" -> Set("d", "c")
+    "a" -> List("b", "c", "d"),
+    "b" -> List.empty[String],
+    "c" -> List("e"),
+    "d" -> List.empty[String],
+    "e" -> List("f", "b"),
+    "f" -> List("d", "c")
   )
 
   private val graphWithoutCycle = Map(
-    "a" -> Set("b", "c", "d"),
-    "b" -> Set.empty[String],
-    "c" -> Set("e"),
-    "d" -> Set.empty[String],
-    "e" -> Set("f", "b"),
-    "f" -> Set("d")
+    "a" -> List("b", "c", "d"),
+    "b" -> List.empty[String],
+    "c" -> List("e"),
+    "d" -> List.empty[String],
+    "e" -> List("f", "b"),
+    "f" -> List("d")
   )
 
   private val largerGraph = Map(
-    "a" -> Set("f"),
-    "b" -> Set("i", "n", "f"),
-    "c" -> Set("k"),
-    "d" -> Set("j", "b", "f"),
-    "e" -> Set("h", "c", "g", "l", "m"),
-    "f" -> Set.empty[String],
-    "g" -> Set("n"),
-    "h" -> Set.empty[String],
-    "i" -> Set("a", "k", "f"),
-    "j" -> Set("i", "n", "f"),
-    "k" -> Set.empty[String],
-    "l" -> Set("b"),
-    "m" -> Set("d"),
-    "n" -> Set("a", "k", "f")
+    "a" -> List("f"),
+    "b" -> List("i", "n", "f"),
+    "c" -> List("k"),
+    "d" -> List("j", "b", "f"),
+    "e" -> List("h", "c", "g", "l", "m"),
+    "f" -> List.empty[String],
+    "g" -> List("n"),
+    "h" -> List.empty[String],
+    "i" -> List("a", "k", "f"),
+    "j" -> List("i", "n", "f"),
+    "k" -> List.empty[String],
+    "l" -> List("b"),
+    "m" -> List("d"),
+    "n" -> List("a", "k", "f")
   )
 
   private val largerGraphCycle = Map(
-    "a" -> Set("f"),
-    "b" -> Set("i", "n", "f"),
-    "c" -> Set("k"),
-    "d" -> Set("j", "b", "f"),
-    "e" -> Set("h", "c", "g", "l", "m"),
-    "f" -> Set("e"),
-    "g" -> Set("n"),
-    "h" -> Set.empty[String],
-    "i" -> Set("a", "k", "f"),
-    "j" -> Set("i", "n", "f"),
-    "k" -> Set.empty[String],
-    "l" -> Set("b"),
-    "m" -> Set("d"),
-    "n" -> Set("a", "k", "f")
+    "a" -> List("f"),
+    "b" -> List("i", "n", "f"),
+    "c" -> List("k"),
+    "d" -> List("j", "b", "f"),
+    "e" -> List("h", "c", "g", "l", "m"),
+    "f" -> List("e"),
+    "g" -> List("n"),
+    "h" -> List.empty[String],
+    "i" -> List("a", "k", "f"),
+    "j" -> List("i", "n", "f"),
+    "k" -> List.empty[String],
+    "l" -> List("b"),
+    "m" -> List("d"),
+    "n" -> List("a", "k", "f")
   )
 
 
