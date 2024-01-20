@@ -58,7 +58,6 @@ object ShortestPathUnweightedGraph extends App {
           }
       }
     }
-    println("-------------------------------------")
     loop(List(List(start)), Set.empty)
   }
 
