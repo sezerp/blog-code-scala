@@ -125,6 +125,7 @@ object CyclesInDirectedGraph extends App {
     }
 
 
+    @tailrec
     def loop(xs: List[String], visited: Set[String]): Boolean = {
       xs match {
         case Nil => false
